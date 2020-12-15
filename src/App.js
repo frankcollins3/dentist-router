@@ -1,25 +1,54 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route } from 'react-router-dom';
+
+import Home from './Components/Home'
+import Contact from './Components/Contact'
+import Procedures from './Components/Procedures'
+import Nav from './Components/Nav'
+import ProcedureDetails from './Components/ProceduresDetails'
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    const proceduresList = [
+      {
+        name: 'Root Canal',
+        id: 1,
+        description: 'Agonizing'
+      },
+      {
+        name: 'Crown',
+        id: 2,
+        description: "ouch ouch ouch"
+      },
+      {
+        name: 'Cleaning',
+        id: 3,
+        description: "hell in a chair"
+      },
+    ]
 
-export default App;
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <Nav />
+  
+          <Route path="/" exact component={Home} />
+          <Route path="/contact" component={Contact} />
+          <Route
+            exact
+            path="/procedures"
+            render={() => { return <Procedures proceduresList={proceduresList} /> }}
+          />
+          <Route
+            path="/procedures/:id"
+            render={(routeProps) => {
+              const id = routeProps.match.params.id
+              const targetProcedure = proceduresList.find((p) => p.id === parseInt(id))
+              return <ProcedureDetails procedure={targetProcedure} />
+            }}
+          />
+        </div>
+      </BrowserRouter>
+    );
+  }
+  
+  export default App;
